@@ -1,0 +1,648 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LearnLens AI | Your Learning Space</title>
+<style>
+:root{--bg:#171720;--side:#20202b;--card:#252532;--card2:#30303f;--text:#f6f3ff;--muted:#aaa6bd;--purple:#c9b8ff;--border:#414052;--green:#9ce4c1;--orange:#f4c28d;--red:#ffabab}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px Inter,"Segoe UI",Arial,sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
+h1{font-size:32px;letter-spacing:-.8px;margin:9px 0}
+h2{font-size:19px;margin:0 0 14px}
+h3{font-size:15px}
+p{line-height:1.6}
+.hidden{display:none!important}
+.muted{color:var(--muted)}
+.small{font-size:12px}
+.app{display:flex;min-height:100vh}
+.sidebar{width:245px;flex-shrink:0;background:var(--side);border-right:1px solid var(--border);display:flex;flex-direction:column}
+.brand{display:flex;gap:12px;align-items:center;padding:23px 17px;border-bottom:1px solid var(--border)}
+.logo{width:44px;height:44px;border-radius:14px;background:var(--purple);color:#241b34;display:grid;place-items:center;font-size:23px;font-weight:900}
+.brand-name{font-size:17px;font-weight:850}
+.brand-sub{font-size:11px;color:var(--muted);margin-top:4px}
+.nav-label{padding:21px 18px 7px;font-size:10px;letter-spacing:1.4px;color:#9993ad;font-weight:800}
+.nav{width:calc(100% - 20px);margin:3px 10px;padding:12px;border:1px solid transparent;border-radius:10px;background:transparent;color:#d7d2e6;text-align:left;display:flex;gap:12px;align-items:center}
+.nav span{width:21px;font-size:17px;text-align:center}
+.nav:hover{background:var(--card)}
+.nav.active{background:#373146;border-color:#635a76;box-shadow:inset 3px 0 var(--purple);color:white}
+.sidebar-bottom{margin-top:auto;padding:15px;border-top:1px solid var(--border)}
+.sidebar-bottom p{font-size:11px;color:var(--muted);line-height:1.6}
+.main{flex:1;min-width:0}
+.topbar{height:70px;padding:0 25px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px}
+.top-title{font-weight:750}
+.user-chip{display:flex;align-items:center;gap:9px;padding:6px 11px;border-radius:30px;background:var(--card);border:1px solid var(--border)}
+.avatar{width:31px;height:31px;display:grid;place-items:center;border-radius:50%;background:var(--purple);color:#251b36;font-weight:900}
+.content{max-width:1450px;margin:auto;padding:27px}
+.page{display:none}.page.active{display:block}
+.eyebrow{font-size:10px;letter-spacing:1.5px;color:var(--purple);font-weight:850}
+.heading{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;margin-bottom:22px}
+.heading p{color:var(--muted);margin:5px 0}
+.hero{padding:27px;border-radius:18px;background:linear-gradient(125deg,#363047,#292e3c);border:1px solid #57516b;margin-bottom:17px}
+.hero-row{display:flex;justify-content:space-between;align-items:center;gap:20px}
+.hero p{color:#c8c3d6;max-width:650px}
+.grid{display:grid;gap:15px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{min-width:0;padding:20px;background:var(--card);border:1px solid var(--border);border-radius:15px}
+.card-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
+.card-heading h2{margin:0}
+.btn{padding:10px 13px;border:1px solid var(--border);border-radius:9px;background:var(--card2);color:var(--text);font-weight:650}
+.btn:hover{filter:brightness(1.12)}
+.primary{background:var(--purple);border-color:var(--purple);color:#261d37}
+.danger{background:#482b35;color:#ffd2d2}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.stat-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.stat-label{font-size:12px;color:var(--muted)}
+.stat-number{font-size:29px;font-weight:850;margin:13px 0 5px}
+.stat-icon{width:39px;height:39px;border-radius:11px;background:#393449;display:grid;place-items:center;font-size:18px}
+.progress{height:6px;border-radius:10px;background:#42404f;overflow:hidden;margin:12px 0}
+.progress span{display:block;height:100%;background:var(--purple);border-radius:10px}
+.pill{display:inline-block;padding:5px 9px;border-radius:7px;background:#403950;color:#e2d8ff;font-size:10px;font-weight:800}
+.green{background:#244137;color:var(--green)}
+.orange{background:#4a392c;color:var(--orange)}
+.task{padding:14px;margin-top:10px;background:#2b2b39;border:1px solid var(--border);border-radius:11px}
+.task-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.task h3{margin:10px 0 5px}
+.task p{font-size:12px;color:var(--muted);margin:4px 0}
+.task-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.control{width:100%;padding:12px;border:1px solid var(--border);border-radius:9px;background:#191923;color:var(--text)}
+label{display:block;font-size:12px;color:#d5d1e3;margin:14px 0 7px}
+.subject{transition:.15s}.subject:hover{border-color:var(--purple);transform:translateY(-2px)}
+.subject-icon{font-size:28px;margin-bottom:12px}
+.subject p{font-size:12px;color:var(--muted)}
+.option{display:block;width:100%;text-align:left;padding:13px;margin-top:9px;border:1px solid var(--border);border-radius:10px;background:var(--card2);color:var(--text)}
+.option:hover:not(:disabled){border-color:var(--purple)}
+.option.correct{border-color:var(--green);background:#253d34}
+.option.wrong{border-color:var(--red);background:#462c35}
+.list-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.list-row:last-child{border-bottom:0}
+.grow{flex:1;min-width:0}
+.list-row p{font-size:12px;color:var(--muted);margin:4px 0}
+.empty{padding:17px 3px;color:var(--muted);line-height:1.7}
+.notice{padding:13px;background:#393348;border-radius:10px;line-height:1.6}
+.badges{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+.badge-card{text-align:center;padding:16px 8px;border:1px solid var(--border);border-radius:12px;background:#2d2c3a}
+.badge-card .emoji{font-size:28px}
+.badge-card h3{margin:9px 0 5px}
+.badge-card p{font-size:11px;color:var(--muted)}
+.badge-card.locked{opacity:.42}
+.timer{font-size:46px;font-weight:850;text-align:center;font-variant-numeric:tabular-nums;margin:20px 0}
+.auth-card{max-width:440px;margin:30px auto;padding:24px}
+.message{padding:12px;border-radius:9px;margin:12px 0;background:#482b35;color:#ffd2d2;line-height:1.5}
+.mobile-menu{display:none}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:22px}
+@media(max-width:1000px){.sidebar{width:220px}.content{padding:18px}.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:720px){.app{display:block}.sidebar{display:none;position:fixed;z-index:10;top:0;bottom:0;left:0;width:265px;overflow-y:auto;box-shadow:0 0 0 100vmax #0009}.sidebar.open{display:flex}.mobile-menu{display:inline-block}.topbar{height:62px;padding:0 12px}.content{padding:15px 11px}.g2,.g3{grid-template-columns:1fr}.g4{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.card{padding:15px}.hero{padding:19px}.hero-row,.heading{flex-direction:column;align-items:flex-start}.badges{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><div class="logo">L</div><div><div class="brand-name">LearnLens AI</div><div class="brand-sub">Your AI-powered study space</div></div></div>
+  <div class="nav-label">YOUR WORKSPACE</div>
+  <button class="nav active" data-page="today"><span>▦</span>Dashboard</button>
+  <button class="nav" data-page="subjects"><span>◫</span>Subjects & Quizzes</button>
+  <button class="nav" data-page="planner"><span>▣</span>Study Planner</button>
+  <button class="nav" data-page="coach"><span>✦</span>AI Study Coach</button>
+  <button class="nav" data-page="weakspots"><span>◉</span>Weak Spot Radar</button>
+  <button class="nav" data-page="sprint"><span>⚡</span>Smart Study Sprint</button>
+  <button class="nav" data-page="revision"><span>▤</span>Revision Vault</button>
+  <div class="nav-label">YOUR PROGRESS</div>
+  <button class="nav" data-page="achievements"><span>🏆</span>Streaks & Achievements</button>
+  <button class="nav" data-page="settings"><span>⚙</span>Settings</button>
+  <div class="sidebar-bottom">
+    <button class="btn primary" style="width:100%" onclick="navigate('sprint')">⚡ Start a study sprint</button>
+    <p>Your study tasks are saved in this browser. Quiz attempts use your FastAPI backend.</p>
+    <button id="logoutBtn" class="btn hidden" style="width:100%" onclick="logout()">Log out</button>
+  </div>
+</aside>
+
+<div class="main">
+<header class="topbar">
+  <div style="display:flex;align-items:center;gap:10px"><button class="btn mobile-menu" onclick="toggleSidebar()">☰</button><span id="topTitle" class="top-title">Dashboard</span></div>
+  <div style="display:flex;align-items:center;gap:10px"><span id="topDate" class="muted small"></span><div class="user-chip"><div id="avatar" class="avatar">S</div><span id="topUser" class="small">Student</span></div></div>
+</header>
+
+<main class="content">
+<section id="page-welcome" class="page">
+  <div class="hero"><div class="eyebrow">WELCOME TO LEARNLENS AI</div><h1>Learn smarter.<br><span style="color:var(--purple)">Build your own streak.</span></h1><p>Your personal study workspace for quizzes, revision, progress tracking and smarter learning habits.</p><div class="btn-row"><button class="btn primary" onclick="showAuth('signup')">Create account →</button><button class="btn" onclick="showAuth('login')">Student login</button></div></div>
+  <div id="authWrap" class="card auth-card hidden"><button class="btn" onclick="document.getElementById('authWrap').classList.add('hidden')">← Back</button><div class="eyebrow" style="margin-top:17px">LEARNLENS AI</div><h1 id="authTitle">Welcome back</h1><p id="authSubtitle" class="muted">Log in to continue.</p><div id="authMessage" class="hidden"></div><form id="authForm" onsubmit="submitAuth(event)"><div id="nameWrap" class="hidden"><label for="authName">Full name</label><input class="control" id="authName" maxlength="100"></div><label for="authEmail">Email</label><input class="control" id="authEmail" type="email" autocomplete="email" required><label for="authPassword">Password</label><input class="control" id="authPassword" type="password" minlength="8" required><button id="authSubmit" class="btn primary" style="width:100%;margin-top:16px">Log in</button></form><p id="switchLabel" class="muted">New here?</p><button id="switchBtn" class="btn" onclick="toggleAuth()">Create account</button></div>
+</section>
+
+<section id="page-today" class="page active">
+  <div class="hero"><div class="hero-row"><div><div class="eyebrow" id="heroDate">YOUR LEARNING SPACE</div><h1>Make today count.</h1><p id="greeting">Every question is progress. Every study session counts.</p><button class="btn primary" onclick="navigate('subjects')">Start learning →</button></div><div class="stat-icon" style="width:58px;height:58px;font-size:27px">✦</div></div></div>
+  <div class="grid g4" style="margin-bottom:17px">
+    <div class="card"><div class="stat-top"><span class="stat-label">Tasks completed</span><span class="stat-icon">✓</span></div><div class="stat-number" id="tasksDone">0 / 0</div><div class="progress"><span id="taskProgress" style="width:0"></span></div></div>
+    <div class="card"><div class="stat-top"><span class="stat-label">Quiz attempts</span><span class="stat-icon">◫</span></div><div class="stat-number" id="attemptCount">0</div><div class="stat-label">Answers recorded</div></div>
+    <div class="card"><div class="stat-top"><span class="stat-label">Quiz accuracy</span><span class="stat-icon">◎</span></div><div class="stat-number" id="accuracy">—</div><div class="stat-label">Correct answers</div></div>
+    <div class="card"><div class="stat-top"><span class="stat-label">Learning streak</span><span class="stat-icon">🔥</span></div><div class="stat-number"><span id="streak">0</span> days</div><div class="stat-label" id="xpDisplay">0 XP earned</div></div>
+  </div>
+  <div class="grid g2">
+    <div class="card"><div class="card-heading"><h2>Today's study plan</h2><button class="btn" onclick="navigate('planner')">View all</button></div><div id="todayTasks"></div><button class="btn primary" style="margin-top:12px" onclick="navigate('planner')">+ Add a task</button></div>
+    <div class="card"><div class="card-heading"><h2>AI Study Coach</h2><span class="pill">YOUR NEXT STEP</span></div><h3 id="homeAdvice">Start with one quiz.</h3><p id="homeAdviceText" class="muted">Your recommendations will improve as you record quiz answers.</p><button class="btn primary" onclick="navigate('coach')">View insights →</button></div>
+  </div>
+  <div class="card" style="margin-top:17px"><div class="card-heading"><h2>Continue learning</h2><button class="btn" onclick="navigate('subjects')">All subjects →</button></div><div id="homeSubjects" class="grid g3"></div></div>
+  <div class="card" style="margin-top:17px"><div class="card-heading"><h2>Latest achievement</h2><button class="btn" onclick="navigate('achievements')">View all</button></div><div id="latestAchievement" class="notice">Complete a quiz to start unlocking achievements.</div></div>
+</section>
+
+<section id="page-subjects" class="page">
+  <div class="heading"><div><div class="eyebrow">YOUR LEARNING LIBRARY</div><h1>Subjects & Quizzes</h1><p>Practise concepts and get an achievement report after every quiz.</p></div></div>
+  <div id="subjectGrid" class="grid g3"></div>
+  <div id="quizPanel" class="card hidden" style="margin-top:18px"><div class="card-heading"><h2 id="quizTitle">Quiz</h2><button class="btn" onclick="closeQuiz()">Close</button></div><label for="topic">Topic</label><select id="topic" class="control"></select><label for="difficulty">Difficulty</label><select id="difficulty" class="control"><option value="easy">Easy</option><option value="medium">Medium</option><option value="hard">Hard</option></select><button class="btn primary" style="margin-top:14px" onclick="startQuiz()">Start quiz →</button><div id="quizArea" class="hidden" style="margin-top:20px"></div></div>
+</section>
+
+<section id="page-planner" class="page">
+  <div class="heading"><div><div class="eyebrow">PLAN YOUR PROGRESS</div><h1>Study Planner</h1><p>Create tasks and celebrate each completed session.</p></div></div>
+  <div class="grid g2">
+    <div class="card"><h2>Create a task</h2><form id="taskForm" onsubmit="addTask(event)"><label for="taskName">Study task</label><input id="taskName" class="control" required maxlength="150" placeholder="Revise Python functions"><label for="taskSubject">Subject</label><select id="taskSubject" class="control"><option>Python</option><option>C Programming</option><option>Machine Learning</option><option>AI</option><option>Data Structures</option><option>Other</option></select><div class="grid g2"><div><label for="taskDate">Date</label><input id="taskDate" class="control" type="date" required></div><div><label for="taskTime">Time</label><input id="taskTime" class="control" type="time" value="18:00"></div></div><label for="taskPriority">Priority</label><select id="taskPriority" class="control"><option>Normal</option><option>High</option><option>Low</option></select><button class="btn primary" style="margin-top:15px">Save task</button></form></div>
+    <div class="card"><div class="card-heading"><h2>Your tasks</h2><select id="taskFilter" class="control" style="width:auto" onchange="renderPlanner()"><option value="all">All</option><option value="today">Today</option><option value="pending">Pending</option><option value="done">Completed</option></select></div><div id="plannerTasks"></div></div>
+  </div>
+</section>
+
+<section id="page-coach" class="page">
+  <div class="heading"><div><div class="eyebrow">YOUR PERSONAL LEARNING GUIDE</div><h1>AI Study Coach ✦</h1><p>Use your quiz results to decide what to practise next.</p></div></div>
+  <div class="grid g2"><div class="card"><span class="pill">PERSONALIZED INSIGHT</span><h2 style="margin-top:15px">Your next best step</h2><p id="coachAdvice" class="muted">Complete a quiz to receive a recommendation.</p><button class="btn primary" onclick="renderCoach()">Analyse progress</button></div><div class="card"><h2>Study mission</h2><div id="missionText" class="notice">Complete a quiz and review your mistakes.</div><button class="btn primary" style="margin-top:13px" onclick="navigate('subjects')">Start a quiz →</button></div></div>
+  <div class="card" style="margin-top:16px"><h2>Your next steps</h2><div id="coachSteps"></div></div>
+</section>
+
+<section id="page-weakspots" class="page">
+  <div class="heading"><div><div class="eyebrow">LEARN FROM YOUR MISTAKES</div><h1>Weak Spot Radar ◉</h1><p>Find topics where you could use more practice.</p></div><button class="btn" onclick="loadAttempts()">Refresh</button></div>
+  <div class="card"><h2>Topic performance</h2><div id="weakSpotList"></div></div>
+</section>
+
+<section id="page-sprint" class="page">
+  <div class="heading"><div><div class="eyebrow">ONE GOAL. ONE FOCUSED SESSION.</div><h1>Smart Study Sprint ⚡</h1><p>Choose a small goal and give it your full attention.</p></div></div>
+  <div class="grid g2"><div class="card"><h2>Set your sprint</h2><label for="sprintGoal">Your goal</label><input id="sprintGoal" class="control" maxlength="150" placeholder="Revise pointers in C"><label for="sprintMinutes">Duration</label><select id="sprintMinutes" class="control"><option value="10">10 minutes</option><option value="15">15 minutes</option><option value="25" selected>25 minutes</option><option value="45">45 minutes</option></select><button class="btn primary" style="margin-top:15px" onclick="beginSprint()">Start sprint</button></div><div class="card"><div class="eyebrow">CURRENT SPRINT</div><h2 id="sprintTitle" style="margin-top:12px">Ready to focus?</h2><div id="sprintClock" class="timer">25:00</div><p id="sprintStatus" class="muted">Your next small win starts here.</p><div class="btn-row"><button class="btn primary" onclick="toggleSprint()">Start / Pause</button><button class="btn" onclick="finishSprint()">Finish sprint</button></div></div></div>
+  <div class="card" style="margin-top:16px"><h2>Sprint history</h2><div id="sprintHistory"></div></div>
+</section>
+
+<section id="page-revision" class="page">
+  <div class="heading"><div><div class="eyebrow">REMEMBER WHAT MATTERS</div><h1>Revision Vault ▤</h1><p>Save tricky topics for another round of practice.</p></div></div>
+  <div class="grid g2"><div class="card"><h2>Save a topic</h2><form onsubmit="saveRevision(event)"><label for="revisionTopic">Topic name</label><input id="revisionTopic" class="control" required maxlength="120" placeholder="Pointers and arrays"><label for="revisionSubject">Subject</label><select id="revisionSubject" class="control"><option>Python</option><option>C Programming</option><option>Machine Learning</option><option>AI</option><option>Data Structures</option><option>Other</option></select><label for="revisionNote">Revision note</label><input id="revisionNote" class="control" maxlength="300" placeholder="Review examples and solve questions"><button class="btn primary" style="margin-top:15px">+ Save topic</button></form></div><div class="card"><h2>Your revision list</h2><div id="revisionList"></div></div></div>
+</section>
+
+<section id="page-achievements" class="page">
+  <div class="heading"><div><div class="eyebrow">EVERY SMALL WIN COUNTS</div><h1>Streaks & Achievements 🏆</h1><p>Your progress is built one answer and one task at a time.</p></div></div>
+  <div class="grid g4" style="margin-bottom:16px"><div class="card"><div class="stat-label">Total XP</div><div id="achXP" class="stat-number">0</div></div><div class="card"><div class="stat-label">Quiz answers</div><div id="achAttempts" class="stat-number">0</div></div><div class="card"><div class="stat-label">Tasks completed</div><div id="achTasks" class="stat-number">0</div></div><div class="card"><div class="stat-label">Learning streak</div><div class="stat-number"><span id="achStreak">0</span> 🔥</div></div></div>
+  <div class="card"><h2>Achievement collection</h2><div id="badgeGrid" class="badges"></div></div>
+  <div class="card" style="margin-top:16px"><h2>Recent quiz results</h2><div id="quizHistory"></div></div>
+  <div class="card" style="margin-top:16px"><h2>Last seven learning days</h2><div id="dayStrip" class="grid g4"></div></div>
+</section>
+
+<section id="page-settings" class="page">
+  <div class="heading"><div><div class="eyebrow">YOUR WORKSPACE</div><h1>Settings</h1><p>Manage your study preferences and account.</p></div></div>
+  <div class="grid g2"><div class="card"><h2>Study preferences</h2><label for="focusDefault">Default sprint duration</label><select id="focusDefault" class="control" onchange="saveSettings()"><option value="15">15 minutes</option><option value="25">25 minutes</option><option value="45">45 minutes</option></select><label for="taskGoal">Daily task goal</label><select id="taskGoal" class="control" onchange="saveSettings()"><option value="1">1 task</option><option value="2">2 tasks</option><option value="3">3 tasks</option><option value="5">5 tasks</option></select><p id="settingsMsg" class="muted small">Preferences are saved in this browser.</p></div><div class="card"><h2>Account</h2><p class="muted">Signed in as</p><p id="settingsUser">Guest</p><button class="btn" onclick="loadAttempts()">Refresh quiz progress</button> <button class="btn danger" onclick="logout()">Log out</button><p class="muted small">Tasks, sprints and revision notes are stored locally in this browser.</p></div></div>
+</section>
+</main>
+<footer>LearnLens AI · Learn smarter, one day at a time.</footer>
+</div>
+</div>
+
+<!-- A complete achievement report appears after every quiz -->
+<div id="achievementOverlay" class="hidden" style="position:fixed;inset:0;z-index:50;background:#11111bee;overflow:auto;padding:20px">
+  <div class="card" style="max-width:720px;margin:30px auto;padding:25px">
+    <div style="text-align:center"><div style="font-size:45px" id="resultEmoji">🏆</div><div class="eyebrow">QUIZ COMPLETED</div><h1 id="resultHeading">Amazing effort!</h1><p id="resultSubtitle" class="muted">Your learning journey continues.</p></div>
+    <div class="grid g3" style="margin-top:22px">
+      <div class="card"><div class="stat-label">Your score</div><div id="resultScore" class="stat-number">0/0</div></div>
+      <div class="card"><div class="stat-label">Accuracy</div><div id="resultAccuracy" class="stat-number">0%</div></div>
+      <div class="card"><div class="stat-label">XP earned</div><div id="resultXP" class="stat-number">+0</div></div>
+    </div>
+    <div class="card" style="margin-top:15px"><h2>Achievement unlocked</h2><div id="resultBadges"></div></div>
+    <div class="card" style="margin-top:15px"><h2>Learning insight</h2><p id="resultAdvice" class="muted"></p><div class="progress"><span id="resultBar" style="width:0"></span></div><p id="resultNext" class="small muted"></p></div>
+    <div class="btn-row" style="justify-content:center"><button class="btn primary" onclick="closeAchievementAndRetry()">Try another quiz</button><button class="btn" onclick="closeAchievementAndDashboard()">Back to dashboard</button><button class="btn" onclick="closeAchievementAndProgress()">View achievements</button></div>
+  </div>
+</div>
+
+<script>
+"use strict";
+const API={register:"/api/auth/register",login:"/api/auth/login",me:"/api/auth/me",attempts:"/api/attempts"};
+const TOKEN="learnlens_access_token";
+const KEYS={tasks:"ll_tasks_v4",revision:"ll_revision_v4",sprints:"ll_sprints_v4",settings:"ll_settings_v4",xp:"ll_xp_v4",badges:"ll_badges_v4",history:"ll_quiz_history_v4",days:"ll_active_days_v4"};
+let user=null,attempts=[],authMode="login",subjectNow="Python",questions=[],qi=0,score=0,answered=false,lastQuiz=null;
+let sprintRemaining=1500,sprintEnd=0,sprintRunning=false,sprintInterval=null;
+
+const BANK={
+"Python":{
+"Python Basics":[
+["Which keyword defines a function?",["func","def","function","method"],1,"def defines a function."],
+["Which type stores True or False?",["str","int","bool","list"],2,"bool is the Boolean type."],
+["Which symbol starts a Python comment?",["//","#","<!--","**"],1,"A single-line comment starts with #."],
+["What does len([2,4,6]) return?",["2","3","6","4"],1,"There are three elements."],
+["Which collection is mutable?",["tuple","str","list","int"],2,"Lists can be changed."],
+["Which operator tests equality?",["=","==",":=","!="],1,"== compares values."],
+["What is 7 // 2?",["3.5","4","3","2"],2,"Floor division gives 3."],
+["Which value represents no value?",["None","null","void","empty"],0,"Python uses None."],
+["Which brackets create a dictionary?",["[]","()","{}","<>"],2,"Dictionaries use curly braces."],
+["How do you display text?",["echo()","console.log()","print()","write()"],2,"print() displays output."]],
+"Loops and Conditions":[
+["Which keyword starts a condition?",["when","if","case","check"],1,"if evaluates a condition."],
+["Which loop iterates over a sequence?",["foreach","repeat","for","loop"],2,"for iterates over a sequence."],
+["Which keyword skips to the next iteration?",["stop","pass","continue","break"],2,"continue advances to the next iteration."],
+["Which keyword exits a loop?",["break","exitloop","stop","return"],0,"break exits the nearest loop."],
+["What does range(3) produce?",["1,2,3","0,1,2","0,1,2,3","3"],1,"The stop value is excluded."],
+["Which operator means logical AND?",["&","&&","and","AND()"],2,"Python uses and."],
+["What does range(1,4) produce?",["1,2,3,4","0,1,2,3","1,2,3","2,3,4"],2,"It produces 1, 2 and 3."],
+["When does else after if run?",["Always first","If condition is false","Repeats if","Defines a loop"],1,"else handles the alternative."],
+["Which loop checks its condition before running?",["while","do-while","repeat-until","switch"],0,"while checks its condition first."],
+["Which keyword is a no-operation placeholder?",["skip","null","pass","next"],2,"pass does nothing."]],
+"Functions":[
+["Which keyword returns a value?",["send","return","yieldonly","give"],1,"return sends a result to the caller."],
+["What is a parameter?",["A function input name","A loop","A file","A class instance"],0,"Parameters receive arguments."],
+["What does a function return by default?",["0","False","None","An error"],2,"Python functions return None by default."],
+["Which is a default parameter?",["def f(x=2):","def f(x:=2):","function f(x:2)","def f(default x 2):"],0,"A default value follows the parameter with =."],
+["What is recursion?",["A function calling itself","A variable changing type","A loop condition","A list sort"],0,"A recursive function calls itself."],
+["What does len('AI') return?",["1","2","3","AI"],1,"The string has two characters."],
+["What is a lambda?",["An anonymous function expression","A loop","A module","A class instance"],0,"lambda creates an anonymous function."],
+["Which keyword can create a generator?",["yield","returnonly","gen","asyncreturn"],0,"yield produces generator values."],
+["What is an argument?",["A value passed to a function","A comment","A package","Only a function name"],0,"Arguments are supplied when calling a function."],
+["Which converts suitable text to an integer?",["str()","int()","floatstr()","number()"],1,"int() converts suitable values."]],
+"Lists and Dictionaries":[
+["Which method adds an item to a list?",["push()","append()","insertEnd()","addLast()"],1,"append adds an item at the end."],
+["What is the first list index?",["1","-1","0","Depends on value"],2,"Python starts sequence indexing at zero."],
+["Which dictionary method supports a default?",["fetch()","get()","find()","value()"],1,"get can provide a default."],
+["Can a list contain mixed types?",["Yes","No","Only strings","Only numbers"],0,"Lists can contain different types."],
+["Which method removes and returns an item?",["pop()","clearall()","deleteAll()","erase()"],0,"pop removes and returns an item."],
+["Dictionary keys must be?",["Always strings","Hashable","Always integers","Always lists"],1,"Keys must be hashable."],
+["What does [1,2,3][1] return?",["1","2","3","An error"],1,"Index 1 is the second element."],
+["Which notation slices a list?",["items(1:3)","items[1:3]","items{1,3}","slice(items,1,3)"],1,"A colon selects a slice."],
+["Which method returns dictionary keys?",["keys()","keylist()","allkeys()","indexes()"],0,"keys() provides dictionary keys."],
+["What does list.sort() do?",["Returns a new list","Sorts in place","Deletes the list","Reverses each item"],1,"sort sorts the list in place."]]},
+"C Programming":{
+"C Basics":[
+["What is the usual C entry point?",["start()","main()","run()","begin()"],1,"Execution begins at main()."],
+["Which header declares printf?",["stdlib.h","string.h","stdio.h","math.h"],2,"printf is declared in stdio.h."],
+["Which format specifier commonly prints an int?",["%f","%c","%d","%s"],2,"%d commonly prints an integer."],
+["Which symbol ends a statement?",[":",";","}",","],1,"A semicolon terminates many C statements."],
+["Which type stores a character?",["char","string","text","letter"],0,"char is the character type."],
+["Which operator obtains an address?",["*","&","%","@"],1,"Unary & obtains an address."],
+["Which loop executes at least once?",["for","while","do-while","if"],2,"do-while checks after the body."],
+["What is logical AND in C?",["&","&&","and","||"],1,"&& is logical AND."],
+["Which directive includes a header?",["#include","#define","#header","#import"],0,"#include requests header inclusion."],
+["What does sizeof measure?",["Size in bytes","A value","An address","A string"],0,"sizeof yields a size in bytes."]],
+"Pointers and Arrays":[
+["What does a pointer store?",["A memory address","Only a character","A loop count","A file name"],0,"A pointer holds an address or null pointer value."],
+["What does *ptr do for a valid int pointer?",["Gets the pointed-to int","Gets its address","Declares a loop","Deletes memory"],0,"Unary * dereferences a pointer."],
+["What is the first array index in C?",["1","0","-1","Compiler-dependent"],1,"C arrays start at index zero."],
+["Which operator dereferences a pointer?",["&","*","%","!"],1,"Unary * accesses the pointed-to object."],
+["What is the length of int a[5]?",["4","5","6","Depends on values"],1,"It has five elements."],
+["Which macro represents a null pointer constant?",["nullptr in every C version","NULL","empty","void"],1,"NULL represents a null pointer constant."],
+["What does arr[i] mean?",["*(arr+i)","&arr+i","arr*i","arr+i only"],0,"Array subscripting uses pointer arithmetic."],
+["What is a dangling pointer?",["Pointer to an object whose lifetime ended","A pointer to an int","A null pointer","An array index"],0,"Its target object no longer exists."],
+["Which header declares malloc?",["stdio.h","stdlib.h","ctype.h","time.h"],1,"malloc is declared in stdlib.h."],
+["What should be checked after malloc?",["Allocation success","Variable name","Line count","Comments"],0,"malloc can return NULL."]],
+"Loops and Functions":[
+["Which keyword returns from a function?",["break","return","continue","goto"],1,"return exits the function."],
+["What does break do in a loop?",["Skips one iteration","Terminates the loop","Restarts the loop","Declares a function"],1,"break exits the nearest loop or switch."],
+["What does continue do?",["Ends the program","Skips to next iteration","Exits the function","Clears memory"],1,"continue advances to the next iteration."],
+["Which loop suits a known iteration count?",["for","if","switch","typedef"],0,"for groups initialization, condition and update."],
+["What is a function prototype?",["A function declaration","A function output","A loop body","A pointer value"],0,"A prototype declares a function signature."],
+["Recursion needs what to stop?",["A base case","A global variable","A pointer only","A header"],0,"A base case terminates recursion."],
+["Which keyword exits a function?",["continue","return","break","case"],1,"return exits the function."],
+["Can a C function return a struct by value?",["Yes","No","Only C++","Only with malloc"],0,"C allows structures to be returned by value."],
+["Which statement selects among cases?",["switch","while","typedef","sizeof"],0,"switch selects among case labels."],
+["What does void f(void) indicate?",["No parameters","Any number of parameters","Pointer return","Variable-length array"],0,"It specifies no parameters."]]},
+"Machine Learning":{
+"Supervised Learning":[
+["What data does supervised learning use?",["Labeled examples","Only unlabeled examples","No examples","Random noise"],0,"Supervised learning uses examples with targets."],
+["Which task predicts a continuous value?",["Classification","Regression","Clustering","Association"],1,"Regression predicts numerical values."],
+["Which task predicts a class label?",["Regression","Classification","Dimensionality reduction","Sampling"],1,"Classification predicts categories."],
+["Why split training and test data?",["Evaluate generalization","Increase labels","Remove all features","Guarantee perfect accuracy"],0,"Test data estimates performance on unseen examples."],
+["What is overfitting?",["Learning training patterns too specifically","Failing to load data","Using no features","Always low training accuracy"],0,"An overfit model may perform poorly on unseen data."],
+["What is a feature?",["An input variable","The target only","A model score","A prediction error"],0,"Features describe model inputs."],
+["What does a classification label represent?",["The target class","The learning rate","A missing value","The optimizer"],0,"A label is the target category."],
+["Which metric is the fraction of correct predictions?",["Accuracy","Recall only","Mean absolute error","Support"],0,"Accuracy is correct predictions divided by total predictions."],
+["What does validation data help with?",["Model selection and tuning","Replacing all training data","Guaranteeing no bias","Generating labels automatically"],0,"Validation performance helps tune settings."],
+["Why scale features for some algorithms?",["Different numeric ranges","It always adds data","It changes labels","It removes testing"],0,"Scaling helps some distance- and gradient-based methods."]],
+"Unsupervised Learning":[
+["What data is typical in unsupervised learning?",["Unlabeled data","Only labeled data","Only targets","No observations"],0,"It looks for structure without target labels."],
+["What is clustering?",["Grouping similar examples","Predicting a known target only","Sorting code lines","Scaling labels"],0,"Clustering groups similar examples."],
+["Which algorithm is commonly used for clustering?",["K-means","Linear regression","Logistic regression only","Naive Bayes only"],0,"K-means partitions examples into clusters."],
+["What does dimensionality reduction do?",["Represents data with fewer dimensions","Adds every feature","Creates labels","Always increases model size"],0,"It seeks a lower-dimensional representation."],
+["What does PCA stand for?",["Principal Component Analysis","Predictive Cluster Algorithm","Primary Class Assignment","Probability Calculation Array"],0,"PCA finds directions capturing variance."],
+["Can clustering be evaluated without labels?",["Yes, using internal measures","Never","Only with accuracy","Only with labels"],0,"Internal measures assess cluster structure."],
+["What is an anomaly?",["An observation markedly different from typical data","The most frequent class","A training label","A model parameter"],0,"Anomaly detection identifies unusual observations."],
+["What is a common use of clustering?",["Customer segmentation","Exact target prediction only","Compiling code","Encrypting passwords"],0,"Clustering can group similar customers."],
+["Does unsupervised learning require target labels?",["No","Yes, always","Only images","Only numeric data"],0,"Target labels are not required."],
+["What must standard K-means specify?",["Number of clusters","Every target label","Text labels","No distances"],0,"Standard K-means requires k."]]},
+"AI":{
+"AI Fundamentals":[
+["What is a goal of AI?",["Perform tasks associated with intelligence","Only store files","Only design hardware","Only format documents"],0,"AI includes reasoning, perception and related tasks."],
+["What is machine learning?",["Learning patterns from data","A database format","A programming language only","A network cable"],0,"ML fits models using data."],
+["What is inference?",["Using a model to produce output","Deleting training data","Compiling a database","Drawing a UI"],0,"Inference applies a model to inputs."],
+["What is a training dataset?",["Examples used to fit a model","Only final predictions","A password list","A stylesheet"],0,"Training data helps estimate model parameters."],
+["What does NLP study?",["Human language","Power supply design","File compression only","Image pixels only"],0,"NLP processes language computationally."],
+["What is computer vision?",["Understanding images or video computationally","Database queries only","Managing passwords","Sorting numbers only"],0,"Computer vision analyzes visual information."],
+["What is a heuristic in search?",["A rule of thumb guiding exploration","A guaranteed answer in every case","A password","A file type"],0,"A heuristic estimates promising choices."],
+["What is knowledge representation?",["A structured way to express facts and relationships","A color palette","A hardware port","A login token"],0,"It encodes information for reasoning."],
+["Explainable AI aims to provide?",["Understandable reasons for model outputs","Perfect accuracy","Unlimited data","No evaluation"],0,"Explainability helps people understand model behavior."],
+["Why evaluate an AI model?",["Assess performance and limitations","Guarantee it never fails","Remove data needs","Hide errors"],0,"Evaluation measures performance against criteria."]],
+"Search and NLP":[
+["What does a search algorithm explore?",["Possible states or solutions","HTML styles","Passwords","Only images"],0,"Search explores a state space."],
+["What is breadth-first search?",["Exploring shallow levels before deeper ones","Choosing the lowest heuristic only","Exploring one path only","Randomly deleting nodes"],0,"BFS explores nodes level by level."],
+["Which structure is commonly used by BFS?",["Queue","Stack only","Hash string","CSS grid"],0,"A queue supports FIFO exploration."],
+["Which structure is common for DFS?",["Stack or recursion","Queue only","Spreadsheet","Database index only"],0,"DFS follows a path deeply."],
+["What is tokenization in NLP?",["Splitting text into units","Encrypting a file","Training a GPU","Drawing an image"],0,"Tokenization divides text into tokens."],
+["What is sentiment analysis?",["Estimating expressed opinion or emotion","Counting pixels","Compiling code","Compressing audio"],0,"It estimates sentiment or emotional tone."],
+["What is a language model?",["A model of language patterns","A monitor","A database engine only","A keyboard layout"],0,"Language models learn patterns in text."],
+["What does A* search use?",["Path cost and a heuristic estimate","Only random choices","Only depth","Alphabetic order"],0,"A* uses accumulated cost and a heuristic."],
+["What is stemming?",["Reducing words to approximate roots","Translating every word","Detecting image edges","Generating passwords"],0,"Stemming reduces words to stems."],
+["What is named entity recognition?",["Finding entities like people and places in text","Sorting arrays","Clustering pixels","Compressing a database"],0,"NER identifies entity mentions in text."]]},
+"Data Structures":{
+"Stacks and Queues":[
+["Which principle does a stack use?",["FIFO","LIFO","Random order","Priority only"],1,"A stack removes the newest item first."],
+["Which principle does a queue use?",["LIFO","FIFO","Random order","Reverse sorting"],1,"A queue removes the earliest item first."],
+["Which stack operation adds an item?",["enqueue","push","dequeue","front"],1,"push adds an item to a stack."],
+["Which queue operation removes the front item?",["push","pop","dequeue","insert"],2,"dequeue removes the front item."],
+["What is stack underflow?",["Removing from an empty stack","Adding to a full queue","Sorting a list","Allocating memory"],0,"Underflow occurs when removing from an empty stack."],
+["Which traversal commonly uses a queue?",["Breadth-first search","Depth-first search only","Binary search","Insertion sort"],0,"BFS uses a queue."],
+["Which operation reads the top without removing it?",["peek","push","clear","enqueue"],0,"peek observes the top item."],
+["What is a common stack application?",["Function calls","FIFO scheduling only","Database indexing only","Image resizing"],0,"Call stacks track active function calls."],
+["Where does a standard queue insert?",["Rear","Front only","Both ends always","Random position"],0,"A standard queue inserts at the rear."],
+["What does a circular queue reuse?",["Freed array positions","Function names","Pointer types","Sorted keys only"],0,"Circular indexing reuses available array space."]],
+"Linked Lists":[
+["What does a linked-list node contain?",["Data and a link","Only an array index","Only a loop","A CSS selector"],0,"Nodes store data and links."],
+["What does head point to?",["The first node","Always the last node","The middle node","Array capacity"],0,"Head identifies the first node."],
+["What marks the end of a singly linked list?",["A null link","Negative data always","A semicolon","A queue"],0,"The last node's next pointer is null."],
+["Which structure uses connected nodes?",["Linked list","Fixed integer","Boolean flag","Static function"],0,"Linked lists connect nodes using links."],
+["Insertion after a known node can avoid?",["Shifting array elements","All memory use","Every pointer","All traversal"],0,"Links can change without shifting array elements."],
+["A common linked-list disadvantage?",["No direct constant-time indexing","It cannot grow","It cannot store integers","It must be sorted"],0,"Arbitrary nodes generally require traversal."],
+["A doubly linked node has?",["Next and previous links","Only one integer","No links","Only array size"],0,"It links in both directions."],
+["What can cause a memory leak?",["Losing allocated nodes without freeing them","Reading a node","Moving a pointer correctly","Using a counter"],0,"Unfreed allocated nodes consume memory."],
+["What is traversal?",["Visiting nodes in sequence","Deleting all nodes","Compiling a program","Encrypting values"],0,"Traversal follows links to visit nodes."],
+["To insert at the head, you must?",["Update the new node's link and head","Sort the entire list","Shift every array element","Reverse data"],0,"The new node points to the old head."]]}
+};
+
+const META={"Python":["🐍","Syntax, loops, functions and collections."],"C Programming":["💻","C basics, arrays, pointers and functions."],"Machine Learning":["📊","Supervised and unsupervised learning."],"AI":["🧠","AI fundamentals, search and NLP."],"Data Structures":["🧩","Stacks, queues and linked lists."]};
+
+function read(key,fallback){try{const v=JSON.parse(localStorage.getItem(key)||"null");return v===null?fallback:v}catch{return fallback}}
+function write(key,value){localStorage.setItem(key,JSON.stringify(value))}
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function dayKey(d=new Date()){d=new Date(d);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function toggleSidebar(){document.getElementById("sidebar").classList.toggle("open")}
+function navigate(page){
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+ document.getElementById("page-"+page)?.classList.add("active");
+ document.querySelectorAll(".nav").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
+ document.getElementById("topTitle").textContent=document.querySelector('.nav[data-page="'+page+'"]')?.textContent.trim()||"LearnLens AI";
+ document.getElementById("sidebar").classList.remove("open");
+ if(page==="today")renderToday();
+ if(page==="planner")renderPlanner();
+ if(page==="coach")renderCoach();
+ if(page==="weakspots")renderWeakSpots();
+ if(page==="revision")renderRevisions();
+ if(page==="sprint")renderSprintHistory();
+ if(page==="achievements")renderAchievements();
+ if(page==="settings")renderSettings();
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+document.querySelectorAll(".nav").forEach(b=>b.addEventListener("click",()=>navigate(b.dataset.page)));
+
+function showAuth(mode){
+ authMode=mode;document.getElementById("authWrap").classList.remove("hidden");
+ document.getElementById("authTitle").textContent=mode==="signup"?"Create your account":"Welcome back";
+ document.getElementById("authSubtitle").textContent=mode==="signup"?"Start your learning journey.":"Log in to continue.";
+ document.getElementById("nameWrap").classList.toggle("hidden",mode!=="signup");
+ document.getElementById("authName").required=mode==="signup";
+ document.getElementById("authSubmit").textContent=mode==="signup"?"Create account":"Log in";
+ document.getElementById("switchLabel").textContent=mode==="signup"?"Already have an account?":"New to LearnLens AI?";
+ document.getElementById("switchBtn").textContent=mode==="signup"?"Log in":"Create account";
+ document.getElementById("authMessage").className="hidden";
+}
+function toggleAuth(){showAuth(authMode==="signup"?"login":"signup")}
+async function api(url,options={}){
+ const headers={...(options.headers||{})};if(options.body)headers["Content-Type"]="application/json";
+ const token=localStorage.getItem(TOKEN);if(token)headers.Authorization="Bearer "+token;
+ const response=await fetch(url,{...options,headers});const raw=await response.text();let data={};
+ try{data=raw?JSON.parse(raw):{}}catch{data={detail:raw}}
+ if(!response.ok){let detail=data.detail||"Request failed ("+response.status+")";if(Array.isArray(detail))detail=detail.map(x=>x.msg||"Invalid input").join(", ");throw new Error(detail)}
+ return data;
+}
+function authError(msg){const el=document.getElementById("authMessage");el.className="message";el.textContent=msg}
+async function submitAuth(event){
+ event.preventDefault();const email=document.getElementById("authEmail").value.trim().toLowerCase(),password=document.getElementById("authPassword").value,name=document.getElementById("authName").value.trim(),btn=document.getElementById("authSubmit");
+ if(password.length<8){authError("Password must contain at least 8 characters.");return}
+ btn.disabled=true;btn.textContent="Please wait...";
+ try{
+  if(authMode==="signup")await api(API.register,{method:"POST",body:JSON.stringify({name,email,password})});
+  const result=await api(API.login,{method:"POST",body:JSON.stringify({email,password})});
+  if(!result.access_token)throw new Error("The server did not return an access token.");
+  localStorage.setItem(TOKEN,result.access_token);await verifySession();
+ }catch(e){authError(e.message)}finally{btn.disabled=false;btn.textContent=authMode==="signup"?"Create account":"Log in"}
+}
+async function verifySession(){
+ if(!localStorage.getItem(TOKEN)){showWelcome();return}
+ try{
+  const data=await api(API.me);user=data.user||data;const name=user.name||user.email||"Student";
+  document.getElementById("topUser").textContent=name;document.getElementById("avatar").textContent=name.charAt(0).toUpperCase();
+  document.getElementById("settingsUser").textContent=user.email||name;document.getElementById("logoutBtn").classList.remove("hidden");
+  document.getElementById("authWrap").classList.add("hidden");document.getElementById("page-welcome").classList.remove("active");
+  navigate("today");await loadAttempts();
+ }catch(e){localStorage.removeItem(TOKEN);user=null;showWelcome();console.error(e)}
+}
+function showWelcome(){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById("page-welcome").classList.add("active");document.getElementById("logoutBtn").classList.add("hidden");document.getElementById("topTitle").textContent="Welcome"}
+function logout(){localStorage.removeItem(TOKEN);user=null;attempts=[];document.getElementById("authForm").reset();showWelcome()}
+
+function getTasks(){return read(KEYS.tasks,[])}
+function saveTasks(v){write(KEYS.tasks,v)}
+function addTask(e){
+ e.preventDefault();const items=getTasks();items.push({id:Date.now(),text:document.getElementById("taskName").value.trim(),subject:document.getElementById("taskSubject").value,date:document.getElementById("taskDate").value,time:document.getElementById("taskTime").value,priority:document.getElementById("taskPriority").value,done:false});
+ saveTasks(items);e.target.reset();document.getElementById("taskDate").value=dayKey();document.getElementById("taskTime").value="18:00";renderPlanner();renderToday();renderAchievements();
+}
+function changeTask(id,changes){saveTasks(getTasks().map(t=>t.id===id?{...t,...changes}:t));renderPlanner();renderToday();renderAchievements()}
+function deleteTask(id){saveTasks(getTasks().filter(t=>t.id!==id));renderPlanner();renderToday();renderAchievements()}
+function taskHTML(t){return `<div class="task"><div class="task-top"><span class="pill ${t.priority==="High"?"orange":""}">${esc(t.priority||"Normal")} priority</span><span class="muted small">${esc(t.time||"Any time")}</span></div><h3 style="${t.done?"text-decoration:line-through;opacity:.6":""}">${esc(t.text)}</h3><p>${esc(t.subject)} · ${esc(t.date)}</p><div class="task-actions"><button class="btn ${t.done?"":"primary"}" onclick="changeTask(${t.id},{done:${!t.done}})">${t.done?"Mark pending":"✓ Complete"}</button><button class="btn" onclick="changeTask(${t.id},{date:dayKey(),done:false})">Move to today</button><button class="btn danger" onclick="deleteTask(${t.id})">Delete</button></div></div>`}
+function renderPlanner(){
+ let items=getTasks().sort((a,b)=>(a.date||"").localeCompare(b.date||"")||(a.time||"").localeCompare(b.time||""));
+ const f=document.getElementById("taskFilter").value;
+ if(f==="today")items=items.filter(t=>t.date===dayKey());if(f==="pending")items=items.filter(t=>!t.done);if(f==="done")items=items.filter(t=>t.done);
+ document.getElementById("plannerTasks").innerHTML=items.length?items.map(taskHTML).join(""):'<div class="empty">No tasks here yet. Add a study task.</div>';
+}
+function renderToday(){
+ const all=getTasks(),today=dayKey(),list=all.filter(t=>t.date===today).sort((a,b)=>(a.time||"").localeCompare(b.time||"")),done=list.filter(t=>t.done).length;
+ document.getElementById("tasksDone").textContent=done+" / "+list.length;document.getElementById("taskProgress").style.width=(list.length?done/list.length*100:0)+"%";
+ document.getElementById("todayTasks").innerHTML=list.length?list.slice(0,4).map(taskHTML).join(""):'<div class="empty">Nothing planned today. Add your first task.</div>';
+ const h=new Date().getHours();document.getElementById("greeting").textContent=h<12?"Good morning. Start with one small win.":h<17?"Good afternoon. Keep building your momentum.":"Good evening. A little progress still counts.";
+ renderHomeSubjects();const xp=read(KEYS.xp,0);document.getElementById("xpDisplay").textContent=xp+" XP earned";
+ const a=attempts.length?attempts.filter(x=>x.is_correct===true).length/attempts.length:null;
+ document.getElementById("homeAdvice").textContent=a===null?"Start with your first quiz.":a<.6?"Review your mistakes first.":a<.8?"Practise your trickiest topic.":"Try a harder topic next!";
+ document.getElementById("homeAdviceText").textContent=a===null?"Record quiz answers to get personalised suggestions.":Math.round(a*100)+"% overall accuracy across "+attempts.length+" answers.";
+}
+function subjectHTML(name){return `<div class="card subject"><div class="subject-icon">${META[name][0]}</div><h3>${name}</h3><p>${META[name][1]}</p><button class="btn primary" onclick="openSubject('${name}')">Explore subject →</button></div>`}
+function renderSubjects(){document.getElementById("subjectGrid").innerHTML=Object.keys(BANK).map(subjectHTML).join("")}
+function renderHomeSubjects(){document.getElementById("homeSubjects").innerHTML=Object.keys(BANK).slice(0,3).map(subjectHTML).join("")}
+function openSubject(name){
+ subjectNow=name;document.getElementById("quizTitle").textContent=name+" practice";
+ const select=document.getElementById("topic");select.innerHTML="";
+ Object.keys(BANK[name]).forEach(t=>{const o=document.createElement("option");o.value=t;o.textContent=t;select.appendChild(o)});
+ document.getElementById("quizPanel").classList.remove("hidden");document.getElementById("quizArea").classList.add("hidden");document.getElementById("quizPanel").scrollIntoView({behavior:"smooth"});
+}
+function closeQuiz(){document.getElementById("quizPanel").classList.add("hidden")}
+function shuffle(items){const a=items.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function startQuiz(){
+ if(!user){showWelcome();showAuth("login");return}
+ const topic=document.getElementById("topic").value;questions=shuffle(BANK[subjectNow][topic]||[]).slice(0,10);
+ qi=0;score=0;answered=false;document.getElementById("quizArea").classList.remove("hidden");renderQuestion();document.getElementById("quizArea").scrollIntoView({behavior:"smooth"});
+}
+function renderQuestion(){
+ answered=false;const q=questions[qi],area=document.getElementById("quizArea");
+ area.innerHTML=`<div class="eyebrow">QUESTION ${qi+1} OF ${questions.length}</div><div class="progress"><span style="width:${(qi+1)/questions.length*100}%"></span></div><h2 style="margin-top:20px">${esc(q[0])}</h2><div id="options"></div><p id="feedback" class="muted"></p><button id="nextQuestion" class="btn primary" disabled>${qi===questions.length-1?"See achievement report →":"Next question →"}</button>`;
+ q[1].forEach((text,i)=>{const b=document.createElement("button");b.className="option";b.textContent=String.fromCharCode(65+i)+". "+text;b.onclick=()=>answer(i);document.getElementById("options").appendChild(b)});
+ document.getElementById("nextQuestion").onclick=nextQuestion;
+}
+async function answer(index){
+ if(answered)return;answered=true;const q=questions[qi],correct=index===q[2];if(correct)score++;
+ [...document.getElementById("options").children].forEach((b,i)=>{b.disabled=true;if(i===q[2])b.classList.add("correct");else if(i===index)b.classList.add("wrong")});
+ const feedback=document.getElementById("feedback");feedback.textContent=(correct?"Correct! ":"Not quite. ")+q[3];feedback.style.color=correct?"var(--green)":"var(--red)";
+ document.getElementById("nextQuestion").disabled=false;
+ const params=new URLSearchParams({topic:document.getElementById("topic").value,difficulty:document.getElementById("difficulty").value,is_correct:String(correct)});
+ try{await api(API.attempts+"?"+params,{method:"POST"});feedback.textContent+=" · Saved."}
+ catch(e){feedback.textContent+=" · Could not save to server; this answer still counts in this quiz."}
+}
+function nextQuestion(){if(!answered)return;if(qi<questions.length-1){qi++;renderQuestion()}else finishQuiz()}
+function getBadges(){return read(KEYS.badges,[])}
+function setBadges(v){write(KEYS.badges,v)}
+function getHistory(){return read(KEYS.history,[])}
+function saveHistory(v){write(KEYS.history,v)}
+function newBadge(id,name,emoji,description){return {id,name,emoji,description}}
+const BADGE_DEFS=[
+newBadge("first","First Steps","🌱","Complete your first quiz"),
+newBadge("five","Quiz Explorer","📚","Complete five quizzes"),
+newBadge("ten","Ten Quizzes","🎓","Complete ten quizzes"),
+newBadge("perfect","Perfect Round","💎","Score 100% in a quiz"),
+newBadge("ace","Sharp Mind","🎯","Get 10 correct answers in a quiz"),
+newBadge("xp100","XP Collector","⚡","Earn 100 XP"),
+newBadge("tasks","Planner Pro","📝","Complete five study tasks"),
+newBadge("streak3","Three-Day Streak","🔥","Practise on three consecutive days")
+];
+function evaluateBadges(history,correct,percent,xp){
+ const old=getBadges(),ids=new Set(old.map(b=>b.id)),unlocked=[];
+ const taskCount=getTasks().filter(t=>t.done).length,days=read(KEYS.days,[]);
+ const conditions={
+ first:history.length>=1,five:history.length>=5,ten:history.length>=10,
+ perfect:percent===100,ace:correct>=10,xp100:xp>=100,tasks:taskCount>=5,
+ streak3:countStreak(days)>=3
+ };
+ BADGE_DEFS.forEach(b=>{if(conditions[b.id]&&!ids.has(b.id)){unlocked.push(b);ids.add(b.id)}});
+ setBadges([...old,...unlocked]);return unlocked;
+}
+function recordLearningDay(){
+ const days=read(KEYS.days,[]);if(!days.includes(dayKey()))days.push(dayKey());write(KEYS.days,days);
+}
+function countStreak(days){
+ const sorted=[...new Set(days)].sort().reverse();if(!sorted.length)return 0;
+ if(sorted[0]!==dayKey()&&sorted[0]!==dayKey(new Date(Date.now()-86400000)))return 0;
+ let n=1;for(let i=1;i<sorted.length;i++){const a=new Date(sorted[i-1]+"T12:00:00"),b=new Date(sorted[i]+"T12:00:00");if(Math.round((a-b)/86400000)!==1)break;n++}return n;
+}
+async function finishQuiz(){
+ const total=questions.length,percent=Math.round(score/total*100),history=getHistory();
+ const xpEarned=score*10+20;const newXP=read(KEYS.xp,0)+xpEarned;write(KEYS.xp,newXP);recordLearningDay();
+ const record={id:Date.now(),subject:subjectNow,topic:document.getElementById("topic").value,difficulty:document.getElementById("difficulty").value,score,total,percent,xp:xpEarned,date:new Date().toISOString()};
+ history.unshift(record);saveHistory(history);
+ const unlocked=evaluateBadges(history,score,percent,newXP);
+ lastQuiz=record;
+ document.getElementById("resultEmoji").textContent=percent===100?"🏆":percent>=70?"🌟":"🌱";
+ document.getElementById("resultHeading").textContent=percent===100?"Perfect score!":percent>=80?"Brilliant work!":percent>=50?"You're making progress!":"Every attempt helps you grow!";
+ document.getElementById("resultSubtitle").textContent=subjectNow+" · "+record.topic+" · "+record.difficulty+" difficulty";
+ document.getElementById("resultScore").textContent=score+" / "+total;
+ document.getElementById("resultAccuracy").textContent=percent+"%";
+ document.getElementById("resultXP").textContent="+"+xpEarned;
+ document.getElementById("resultBadges").innerHTML=unlocked.length?unlocked.map(b=>`<div class="list-row"><span style="font-size:28px">${b.emoji}</span><div class="grow"><strong>${esc(b.name)}</strong><p>${esc(b.description)}</p></div><span class="pill green">UNLOCKED</span></div>`).join(""):'<div class="notice">No new badge this time — keep going! Your existing achievements are still saved.</div>';
+ document.getElementById("resultAdvice").textContent=percent>=80?"Excellent understanding. Try a new topic or a harder challenge next.":percent>=50?"Good effort. Review the explanations for incorrect answers, then try this topic again.":"Review the key concepts first. A smaller study session followed by another quiz can help.";
+ document.getElementById("resultBar").style.width=percent+"%";
+ document.getElementById("resultNext").textContent="You earned "+xpEarned+" XP. Total XP: "+newXP+". "+(unlocked.length?"New achievement unlocked: "+unlocked.map(b=>b.name).join(", "):"Your next achievement is waiting.");
+ document.getElementById("achievementOverlay").classList.remove("hidden");
+ await loadAttempts();renderAchievements();
+}
+function closeAchievementAndRetry(){document.getElementById("achievementOverlay").classList.add("hidden");navigate("subjects");openSubject(subjectNow)}
+function closeAchievementAndDashboard(){document.getElementById("achievementOverlay").classList.add("hidden");navigate("today")}
+function closeAchievementAndProgress(){document.getElementById("achievementOverlay").classList.add("hidden");navigate("achievements")}
+
+function attemptDate(a){const d=new Date(a.created_at||a.timestamp||a.date||"");return isNaN(d.getTime())?null:dayKey(d)}
+async function loadAttempts(){
+ if(!localStorage.getItem(TOKEN))return;
+ try{
+  const data=await api(API.attempts);attempts=Array.isArray(data)?data:(data.attempts||[]);
+  const correct=attempts.filter(a=>a.is_correct===true).length;
+  document.getElementById("attemptCount").textContent=attempts.length;
+  document.getElementById("accuracy").textContent=attempts.length?Math.round(correct/attempts.length*100)+"%":"—";
+  const localDays=read(KEYS.days,[]),serverDays=attempts.map(attemptDate).filter(Boolean);
+  document.getElementById("streak").textContent=countStreak([...new Set([...localDays,...serverDays])]);
+  renderToday();renderCoach();renderWeakSpots();renderAchievements();
+ }catch(e){console.error("Could not load quiz attempts:",e.message)}
+}
+function renderCoach(){
+ const history=getHistory(),correct=attempts.filter(a=>a.is_correct===true).length,total=attempts.length;
+ let advice="Take your first quiz so your learning progress can guide your next step.";
+ if(total)advice=correct/total<.6?"Review incorrect answers and rebuild your understanding before increasing difficulty.":correct/total<.8?"Practise the topic with your lowest accuracy, then retest yourself.":"Your overall accuracy looks strong. Try a new topic or increase difficulty.";
+ document.getElementById("coachAdvice").textContent=advice;
+ document.getElementById("missionText").textContent=history.length?"Next mission: improve your score in "+history[0].topic+".":"Mission: complete a quiz, review mistakes and save one difficult topic.";
+ document.getElementById("coachSteps").innerHTML=[["1","Review","Read the explanation for each mistake."],["2","Practise","Attempt a quiz on the same topic."],["3","Retest","Compare your new result with the previous one."]].map(s=>`<div class="list-row"><span class="stat-icon">${s[0]}</span><div class="grow"><strong>${s[1]}</strong><p>${s[2]}</p></div></div>`).join("");
+}
+function renderWeakSpots(){
+ const groups={};attempts.forEach(a=>{const topic=a.topic||"General practice";if(!groups[topic])groups[topic]={n:0,c:0};groups[topic].n++;if(a.is_correct===true)groups[topic].c++});
+ const entries=Object.entries(groups).filter(([_,v])=>v.n>=2).sort((a,b)=>a[1].c/a[1].n-b[1].c/b[1].n);
+ const el=document.getElementById("weakSpotList");
+ if(!attempts.length){el.innerHTML='<div class="empty">Complete a quiz to build your topic insights.</div>';return}
+ if(!entries.length){el.innerHTML='<div class="empty">Answer at least two questions per topic to compare performance.</div>';return}
+ el.innerHTML=entries.map(([topic,v])=>{const pct=Math.round(v.c/v.n*100);return `<div class="task"><div class="task-top"><strong>${esc(topic)}</strong><span class="pill ${pct<60?"orange":pct>=80?"green":""}">${pct<60?"Needs practice":pct<80?"Improving":"Strong"}</span></div><p>${v.c} correct out of ${v.n} answers</p><div class="progress"><span style="width:${pct}%"></span></div><strong>${pct}% accuracy</strong></div>`}).join("");
+}
+function getRevisions(){return read(KEYS.revision,[])}
+function saveRevision(e){e.preventDefault();const items=getRevisions();items.unshift({id:Date.now(),topic:document.getElementById("revisionTopic").value.trim(),subject:document.getElementById("revisionSubject").value,note:document.getElementById("revisionNote").value.trim(),done:false});write(KEYS.revision,items);e.target.reset();renderRevisions()}
+function renderRevisions(){
+ const items=getRevisions();document.getElementById("revisionList").innerHTML=items.length?items.map(r=>`<div class="task"><span class="pill">${esc(r.subject)}</span><h3 style="${r.done?"text-decoration:line-through;opacity:.6":""}">${esc(r.topic)}</h3><p>${esc(r.note||"Review this topic and practise questions.")}</p><div class="task-actions"><button class="btn primary" onclick="toggleRevision(${r.id})">${r.done?"Revise again":"Mark revised"}</button><button class="btn danger" onclick="deleteRevision(${r.id})">Delete</button></div></div>`).join(""):'<div class="empty">Save a difficult topic here to revisit it later.</div>';
+}
+function toggleRevision(id){write(KEYS.revision,getRevisions().map(r=>r.id===id?{...r,done:!r.done}:r));renderRevisions()}
+function deleteRevision(id){write(KEYS.revision,getRevisions().filter(r=>r.id!==id));renderRevisions()}
+
+function getSprints(){return read(KEYS.sprints,[])}
+function beginSprint(){
+ const goal=document.getElementById("sprintGoal").value.trim();if(!goal){document.getElementById("sprintGoal").focus();return}
+ stopSprint();sprintRemaining=Number(document.getElementById("sprintMinutes").value)*60;
+ document.getElementById("sprintTitle").textContent=goal;document.getElementById("sprintStatus").textContent="Focus on your goal.";updateSprint();toggleSprint();
+}
+function updateSprint(){document.getElementById("sprintClock").textContent=String(Math.floor(Math.max(0,sprintRemaining)/60)).padStart(2,"0")+":"+String(Math.max(0,sprintRemaining)%60).padStart(2,"0")}
+function toggleSprint(){
+ if(sprintRunning){sprintRemaining=Math.max(0,Math.ceil((sprintEnd-Date.now())/1000));stopSprint();document.getElementById("sprintStatus").textContent="Sprint paused.";updateSprint();return}
+ if(sprintRemaining<=0){document.getElementById("sprintStatus").textContent="Start a new sprint to continue.";return}
+ if(document.getElementById("sprintTitle").textContent==="Ready to focus?"){document.getElementById("sprintStatus").textContent="Enter a goal and click Start sprint.";return}
+ sprintRunning=true;sprintEnd=Date.now()+sprintRemaining*1000;document.getElementById("sprintStatus").textContent="Stay focused on your goal.";
+ sprintInterval=setInterval(()=>{sprintRemaining=Math.max(0,Math.ceil((sprintEnd-Date.now())/1000));updateSprint();if(sprintRemaining<=0){stopSprint();document.getElementById("sprintStatus").textContent="Sprint complete! Record your session."; }},250);
+}
+function stopSprint(){sprintRunning=false;clearInterval(sprintInterval);sprintInterval=null}
+function finishSprint(){
+ if(sprintRunning)sprintRemaining=Math.max(0,Math.ceil((sprintEnd-Date.now())/1000));stopSprint();
+ const goal=document.getElementById("sprintTitle").textContent;if(goal==="Ready to focus?")return;
+ const total=Number(document.getElementById("sprintMinutes").value)*60,elapsed=Math.max(0,total-sprintRemaining);
+ if(elapsed<1){document.getElementById("sprintStatus").textContent="Start your sprint before finishing.";return}
+ const items=getSprints();items.unshift({id:Date.now(),goal,minutes:Math.max(1,Math.round(elapsed/60)),date:new Date().toLocaleDateString()});write(KEYS.sprints,items);
+ document.getElementById("sprintStatus").textContent="Sprint recorded. Nice work!";renderSprintHistory();
+}
+function renderSprintHistory(){const items=getSprints();document.getElementById("sprintHistory").innerHTML=items.length?items.slice(0,10).map(s=>`<div class="list-row"><span class="stat-icon">⚡</span><div class="grow"><strong>${esc(s.goal)}</strong><p>${esc(s.date)} · ${s.minutes} minutes</p></div></div>`).join(""):'<div class="empty">Completed study sprints will appear here.</div>'}
+
+function renderAchievements(){
+ const history=getHistory(),xp=read(KEYS.xp,0),done=getTasks().filter(t=>t.done).length,days=read(KEYS.days,[]);
+ document.getElementById("achXP").textContent=xp;document.getElementById("achAttempts").textContent=attempts.length;document.getElementById("achTasks").textContent=done;document.getElementById("achStreak").textContent=countStreak([...days,...attempts.map(attemptDate).filter(Boolean)]);
+ const badges=getBadges();document.getElementById("badgeGrid").innerHTML=BADGE_DEFS.map(b=>{const unlocked=badges.some(x=>x.id===b.id);return `<div class="badge-card ${unlocked?"":"locked"}"><div class="emoji">${b.emoji}</div><h3>${b.name}</h3><p>${b.description}</p><span class="pill ${unlocked?"green":""}">${unlocked?"UNLOCKED":"LOCKED"}</span></div>`}).join("");
+ document.getElementById("quizHistory").innerHTML=history.length?history.slice(0,8).map(h=>`<div class="list-row"><span class="stat-icon">${h.percent>=80?"🏆":"📘"}</span><div class="grow"><strong>${esc(h.subject)} · ${esc(h.topic)}</strong><p>${new Date(h.date).toLocaleString()} · ${h.score}/${h.total} · ${h.percent}%</p></div><span class="pill">+${h.xp} XP</span></div>`).join(""):'<div class="empty">Your completed quizzes and scores will appear here.</div>';
+ const strip=document.getElementById("dayStrip");strip.innerHTML="";const active=new Set([...days,...attempts.map(attemptDate).filter(Boolean)]);
+ for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const key=dayKey(d);const el=document.createElement("div");el.className="card";el.style.textAlign="center";el.style.padding="12px 5px";el.innerHTML=`<div class="muted small">${esc(d.toLocaleDateString(undefined,{weekday:"short"}))}</div><h2 style="margin:7px 0">${d.getDate()}</h2><span class="pill ${active.has(key)?"green":""}">${active.has(key)?"ACTIVE":"—"}</span>`;strip.appendChild(el)}
+ const latest=history[0];document.getElementById("latestAchievement").textContent=latest?`${latest.subject}: ${latest.topic} — ${latest.percent}% score, +${latest.xp} XP. Open Achievements to see your badges.`:"Complete a quiz to start unlocking achievements.";
+}
+function saveSettings(){write(KEYS.settings,{focus:Number(document.getElementById("focusDefault").value),goal:Number(document.getElementById("taskGoal").value)});document.getElementById("settingsMsg").textContent="Preferences saved in this browser."}
+function renderSettings(){const s=read(KEYS.settings,{focus:25,goal:3});document.getElementById("focusDefault").value=String(s.focus||25);document.getElementById("taskGoal").value=String(s.goal||3);document.getElementById("settingsUser").textContent=user?.email||user?.name||"Guest"}
+
+function init(){
+ const now=new Date();document.getElementById("topDate").textContent=now.toLocaleDateString(undefined,{day:"numeric",month:"short"});
+ document.getElementById("heroDate").textContent=now.toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"long"}).toUpperCase();
+ document.getElementById("taskDate").value=dayKey();renderSubjects();renderHomeSubjects();renderPlanner();renderToday();renderCoach();renderWeakSpots();renderRevisions();renderSprintHistory();renderAchievements();renderSettings();verifySession();
+}
+init();
+</script>
+</body>
+</html>
